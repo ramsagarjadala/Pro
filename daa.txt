@@ -1,0 +1,469 @@
+DFS.java:
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class DFS {
+    private Stack<Integer> stack;
+
+    public DFS() {
+        stack = new Stack<Integer>();
+    }
+
+    public void dfs(int adjacency_matrix[][], int source) {
+        int number_of_nodes = adjacency_matrix[source].length - 1;
+        int visited[] = new int[number_of_nodes + 1];
+        int element = source;
+        int i = source;
+        System.out.print(element + "\t");
+        visited[source] = 1;
+        stack.push(source);
+
+        while (!stack.isEmpty()) {
+            element = stack.peek();
+            i = element;
+
+            while (i <= number_of_nodes) {
+                if (adjacency_matrix[element][i] == 1 && visited[i] == 0) {
+                    stack.push(i);
+                    visited[i] = 1;
+                    element = i;
+                    System.out.print(element + "\t");
+                    i = 1;  // Move this line outside the if block
+                    continue;
+                }
+                i++;
+            }
+        }
+
+        stack.pop();
+    }
+
+    public static void main(String... arg) {
+        int number_of_nodes, source;
+        Scanner scanner = null;
+
+        try {
+            System.out.println("Enter the number of nodes in the graph");
+            scanner = new Scanner(System.in);
+            number_of_nodes = scanner.nextInt();
+            int adjacency_matrix[][] = new int[number_of_nodes + 1][number_of_nodes + 1];
+            
+            System.out.println("Enter the adjacency matrix");
+            for (int i = 1; i <= number_of_nodes; i++)
+                for (int j = 1; j <= number_of_nodes; j++)
+                    adjacency_matrix[i][j] = scanner.nextInt();
+
+            System.out.println("Enter the source for the graph");
+            source = scanner.nextInt();
+            System.out.println("The DFS Traversal for the graph is given by ");
+            DFS dfs = new DFS();
+            dfs.dfs(adjacency_matrix, source);
+        } catch (InputMismatchException inputMismatch) {
+            System.out.println("Wrong Input format");
+        } finally {
+            if (scanner != null) {
+                scanner.close();
+            }
+        }
+    }
+}
+
+BFS.java:
+
+import java.util.InputMismatchException;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class BFS {
+    private Queue<Integer> queue;
+
+    public BFS() {
+        queue = new LinkedList<Integer>();
+    }
+
+    public void bfs(int adjacency_matrix[][], int source) {
+        int number_of_nodes = adjacency_matrix[source].length - 1;
+        int[] visited = new int[number_of_nodes + 1];
+        int i, element;
+        visited[source] = 1;
+        queue.add(source);
+
+        while (!queue.isEmpty()) {
+            element = queue.remove();
+            i = 1; // Set i to 1 at the beginning of the loop
+            System.out.print(element + "\t");
+
+            while (i <= number_of_nodes) {
+                if (adjacency_matrix[element][i] == 1 && visited[i] == 0) {
+                    queue.add(i);
+                    visited[i] = 1;
+                }
+                i++;
+            }
+        }
+    }
+
+    public static void main(String... arg) {
+        int number_of_nodes, source;
+        Scanner scanner = null;
+
+        try {
+            System.out.println("Enter the number of nodes in the graph");
+            scanner = new Scanner(System.in);
+            number_of_nodes = scanner.nextInt();
+            int adjacency_matrix[][] = new int[number_of_nodes + 1][number_of_nodes + 1];
+
+            System.out.println("Enter the adjacency matrix");
+            for (int i = 1; i <= number_of_nodes; i++)
+                for (int j = 1; j <= number_of_nodes; j++)
+                    adjacency_matrix[i][j] = scanner.nextInt();
+
+            System.out.println("Enter the source for the graph");
+            source = scanner.nextInt();
+            System.out.println("The BFS traversal of the graph is ");
+            BFS bfs = new BFS();
+            bfs.bfs(adjacency_matrix, source);
+        } catch (InputMismatchException inputMismatch) {
+            System.out.println("Wrong Input Format");
+        } finally {
+            if (scanner != null) {
+                scanner.close();
+            }
+        }
+    }
+}
+
+N-Queens:
+BacktrackDemo.java
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+class Operation {
+    int x[] = new int[20];
+    int count = 0;
+
+    public boolean place(int row, int column) {
+        int i;
+        for (i = 1; i <= row - 1; i++) {
+            // checking for column and diagonal conflicts
+            if (x[i] == column)
+                return false;
+            else if (Math.abs(x[i] - column) == Math.abs(i - row))
+                return false;
+        }
+        return true;
+    }
+
+    public void Queen(int row, int n) {
+        int column;
+        for (column = 1; column <= n; column++) {
+            if (place(row, column)) {
+                x[row] = column;
+                if (row == n)
+                    printBoard(n); // printing the board configuration
+                else
+                    // try next queen with the next position
+                    Queen(row + 1, n);
+            }
+        }
+    }
+
+    public void printBoard(int n) {
+        int i;
+        System.out.println("\n\nSolution :" + (++count));
+        for (i = 1; i <= n; i++) {
+            System.out.print(" " + i);
+        }
+        for (i = 1; i <= n; i++) {
+            System.out.print("\n\n" + i);
+            for (int j = 1; j <= n; j++)// for nXn board
+            {
+                if (x[i] == j)
+                    System.out.print(" Q");
+                else
+                    System.out.print(" -");
+            }
+        }
+    }
+}
+
+public class BacktrackDemo {
+    public static void main(String args[]) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        System.out.println("Enter no Of Queens");
+        int n = Integer.parseInt(reader.readLine());
+
+        Operation op = new Operation();
+        op.Queen(1, n);
+    }
+}
+
+
+sum of subsets:
+GFG.java:
+class GFG { 
+// Returns true if there is a subset of set[] with sum equal to given sum 
+static boolean isSubsetSum(int set[], int n, int sum) 
+{ 
+if (sum == 0) 
+return true; 
+if (n == 0 && sum != 0) 
+return false; 
+// If last element is greater than sum, then ignore it 
+if (set[n-1] > sum) 
+return isSubsetSum(set, n-1, sum); 
+/* else, check if sum can be obtained by any of the following 
+(a) including the last element 
+(b) excluding the last element */ 
+return isSubsetSum(set, n-1, sum) || isSubsetSum(set, n-1, sum-set[n-1]); 
+} 
+public static void main (String args[]) 
+{ 
+int set[] = {3, 34, 4, 12, 5, 2}; 
+int sum = 9; 
+int n = set.length; 
+if (isSubsetSum(set, n, sum) == true) 
+System.out.println("Found a subset" + " with given sum"); 
+else 
+System.out.println("No subset with"+ " given sum"); 
+} 
+} 
+
+Prims.java:
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class Prims {
+    private boolean unsettled[];
+    private boolean settled[];
+    private int numberofvertices;
+    private int adjacencyMatrix[][];
+    private int key[];
+    public static final int INFINITE = 999;
+    private int parent[];
+
+    public Prims(int numberofvertices) {
+        this.numberofvertices = numberofvertices;
+        unsettled = new boolean[numberofvertices + 1];
+        settled = new boolean[numberofvertices + 1];
+        adjacencyMatrix = new int[numberofvertices + 1][numberofvertices + 1];
+        key = new int[numberofvertices + 1];
+        parent = new int[numberofvertices + 1];
+    }
+
+    public int getUnsettledCount(boolean unsettled[]) {
+        int count = 0;
+        for (int index = 0; index < unsettled.length; index++) {
+            if (unsettled[index]) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void primsAlgorithm(int adjacencyMatrix[][]) {
+        int evaluationVertex;
+        for (int source = 1; source <= numberofvertices; source++) {
+            for (int destination = 1; destination <= numberofvertices; destination++) {
+                this.adjacencyMatrix[source][destination] = adjacencyMatrix[source][destination];
+            }
+        }
+
+        for (int index = 1; index <= numberofvertices; index++) {
+            key[index] = INFINITE;
+        }
+        key[1] = 0;
+        unsettled[1] = true;
+        parent[1] = 0;
+
+        while (getUnsettledCount(unsettled) != 0) {
+            evaluationVertex = getMinimumKeyVertexFromUnsettled(unsettled);
+            unsettled[evaluationVertex] = false;
+            settled[evaluationVertex] = true;
+            evaluateNeighbours(evaluationVertex);
+        }
+    }
+
+    private int getMinimumKeyVertexFromUnsettled(boolean[] unsettled) {
+        int min = Integer.MAX_VALUE;
+        int node = 0;
+        for (int vertex = 1; vertex <= numberofvertices; vertex++) {
+            if (unsettled[vertex] && key[vertex] < min) {
+                node = vertex;
+                min = key[vertex];
+            }
+        }
+        return node;
+    }
+
+    public void evaluateNeighbours(int evaluationVertex) {
+        for (int destinationVertex = 1; destinationVertex <= numberofvertices; destinationVertex++) {
+            if (!settled[destinationVertex] && adjacencyMatrix[evaluationVertex][destinationVertex] != INFINITE) {
+                if (adjacencyMatrix[evaluationVertex][destinationVertex] < key[destinationVertex]) {
+                    key[destinationVertex] = adjacencyMatrix[evaluationVertex][destinationVertex];
+                    parent[destinationVertex] = evaluationVertex;
+                }
+                unsettled[destinationVertex] = true;
+            }
+        }
+    }
+
+    public void printMST() {
+        System.out.println("SOURCE : DESTINATION = WEIGHT");
+        for (int vertex = 2; vertex <= numberofvertices; vertex++) {
+            System.out.println(parent[vertex] + " : " + vertex + " = " + adjacencyMatrix[parent[vertex]][vertex]);
+        }
+    }
+
+    public static void main(String... arg) {
+        int adjacency_matrix[][];
+        int number_of_vertices;
+        Scanner scan = new Scanner(System.in);
+        try {
+            System.out.println("Enter the number of vertices");
+            number_of_vertices = scan.nextInt();
+            adjacency_matrix = new int[number_of_vertices + 1][number_of_vertices + 1];
+            System.out.println("Enter the Weighted Matrix for the graph");
+            for (int i = 1; i <= number_of_vertices; i++) {
+                for (int j = 1; j <= number_of_vertices; j++) {
+                    adjacency_matrix[i][j] = scan.nextInt();
+                    if (i == j) {
+                        adjacency_matrix[i][j] = 0;
+                        continue;
+                    }
+                    if (adjacency_matrix[i][j] == 0) {
+                        adjacency_matrix[i][j] = INFINITE;
+                    }
+                }
+            }
+
+            Prims prims = new Prims(number_of_vertices);
+            prims.primsAlgorithm(adjacency_matrix);
+            prims.printMST();
+        } catch (InputMismatchException inputMismatch) {
+            System.out.println("Wrong Input Format");
+        } finally {
+            scan.close();
+        }
+    }
+}
+
+Kruskals:
+Graph.java:
+import java.util.Arrays;
+
+class Graph {
+    class Edge implements Comparable<Edge> {
+        int src, dest, weight;
+
+        public int compareTo(Edge compareEdge) {
+            return this.weight - compareEdge.weight;
+        }
+    }
+
+    class Subset {
+        int parent, rank;
+    }
+
+    int V, E;
+    Edge edge[];
+
+    Graph(int v, int e) {
+        V = v;
+        E = e;
+        edge = new Edge[E];
+        for (int i = 0; i < e; ++i)
+            edge[i] = new Edge();
+    }
+
+    int find(Subset subsets[], int i) {
+        if (subsets[i].parent != i)
+            subsets[i].parent = find(subsets, subsets[i].parent);
+        return subsets[i].parent;
+    }
+
+    void union(Subset subsets[], int x, int y) {
+        int xroot = find(subsets, x);
+        int yroot = find(subsets, y);
+
+        if (subsets[xroot].rank < subsets[yroot].rank)
+            subsets[xroot].parent = yroot;
+        else if (subsets[xroot].rank > subsets[yroot].rank)
+            subsets[yroot].parent = xroot;
+        else {
+            subsets[yroot].parent = xroot;
+            subsets[xroot].rank++;
+        }
+    }
+
+    void kruskalMST() {
+        Edge result[] = new Edge[V];
+        int e = 0;
+        int i = 0;
+        for (i = 0; i < V; ++i)
+            result[i] = new Edge();
+
+        Arrays.sort(edge);
+
+        Subset subsets[] = new Subset[V];
+        for (i = 0; i < V; ++i)
+            subsets[i] = new Subset();
+
+        for (int v = 0; v < V; ++v) {
+            subsets[v].parent = v;
+            subsets[v].rank = 0;
+        }
+
+        i = 0;
+
+        while (e < V - 1) {
+            Edge nextEdge = edge[i++];
+            int x = find(subsets, nextEdge.src);
+            int y = find(subsets, nextEdge.dest);
+
+            if (x != y) {
+                result[e++] = nextEdge;
+                union(subsets, x, y);
+            }
+        }
+
+        System.out.println("Following are the edges in the constructed MST");
+        for (i = 0; i < e; ++i)
+            System.out.println(result[i].src + " -- " + result[i].dest + " == " + result[i].weight);
+    }
+
+        public static void main(String[] args) {
+        int V = 4;
+        int E = 5;
+        Graph graph = new Graph(V, E);
+
+        graph.edge[0].src = 0;
+        graph.edge[0].dest = 1;
+        graph.edge[0].weight = 10;
+
+        graph.edge[1].src = 0;
+        graph.edge[1].dest = 2;
+        graph.edge[1].weight = 6;
+
+        graph.edge[2].src = 0;
+        graph.edge[2].dest = 3;
+        graph.edge[2].weight = 5;
+
+        graph.edge[3].src = 1;
+        graph.edge[3].dest = 3;
+        graph.edge[3].weight = 15;
+
+        graph.edge[4].src = 2;
+        graph.edge[4].dest = 3;
+        graph.edge[4].weight = 4;
+
+        graph.kruskalMST();
+    }
+}
+
