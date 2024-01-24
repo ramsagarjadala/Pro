@@ -1,0 +1,59 @@
+from sklearn.cluster import KMeans
+import numpy as np
+
+x=np.array([[1.713,1.586], [0.180,1.786], [0.353,1.240], [0.940,1.566], [1.486,0.759], [1.266,1.106],[1.540,0.419],[0.459,1.799],[0.773,0.186]])
+y=np.array([0,1,1,0,1,0,1,1,1]) 
+kmeans=KMeans(n_clusters=3,random_state=0).fit(x,y)
+print("The input data is:")
+print("VAR1\t VAR2\t CLASS")
+i=0
+for var in x:
+    print(var[0],"\t",var[1],"\t ",y[i])
+    i+=1
+print("="*30)
+print("The test data to preidict:")
+test_data=[]
+var1=float(input("enter,var1:"))
+var2=float(input("enter,var2:"))
+test_data.append(var1)
+test_data.append(var2)
+print("="*30)
+print("the predicted class is:",kmeans.predict([test_data]))
+
+
+
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+dataFrame=pd.read_csv("Age_Income.csv",delimiter="\t")
+print(dataFrame.columns)
+age=dataFrame["Age"]
+income=dataFrame['Income']
+num=np.size(age)
+mean_age=np.mean(age)
+mean_income=np.mean(income)
+ 
+# calculating cross-deviation and deviation about age 
+CD_ageincome = np.sum(income*age) - num*mean_income*mean_age 
+CD_ageage = np.sum(age*age) - num*mean_age*mean_age 
+ 
+# calculating regression coefficients 
+b1 = CD_ageincome / CD_ageage 
+b0 = mean_income - b1*mean_age 
+# to display coefficients 
+print("Estimated Coefficients :") 
+print("b0 = ",b0,"\nb1 = ",b1) 
+# To plot the actual points as scatter plot 
+plt.scatter(age, income, color = "b",marker = "o") 
+# TO predict response vector 
+response_Vec = b0 + b1*age 
+# To plot the regression line 
+plt.plot(age, response_Vec, color = "r") 
+# Placing labels 
+plt.xlabel('Age') 
+plt.ylabel('Income') 
+# To display plot 
+plt.show()
