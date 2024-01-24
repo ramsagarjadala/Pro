@@ -24,6 +24,8 @@ print("the predicted class is:",kmeans.predict([test_data]))
 
 
 
+
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
